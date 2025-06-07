@@ -55,8 +55,26 @@ class GeminiService:
             raise ValueError("Failed to get a valid JSON response from the AI model.")
 
     async def generate_title_suggestions(self, text: str, count: int):
-        # Placeholder logic
-        print(f"Received text to generate {count} titles. Simulating API call.")
-        return [f"Placeholder Title {i+1}" for i in range(count)]
+        prompt = f"""
+        You are an expert copywriter specializing in creating compelling, SEO-friendly blog post titles.
+        Based on the following text, generate exactly {count} unique title suggestions.
+        Your output MUST be a single, valid JSON array of strings, and nothing else. Do not include any explanations.
+        Example: ["Title 1", "Title 2", "Title 3"]
+
+        Text:
+        ---
+        {text}
+        ---
+        """
+
+        response = await self.model.generate_content_async(prompt)
+
+        try:
+            json_text = response.text.strip().lstrip("```json").rstrip("```")
+            return json.loads(json_text)
+        except (json.JSONDecodeError, AttributeError) as e:
+            print(f"Error parsing Gemini response: {e}")
+            print(f"Raw response text: {response.text}")
+            raise ValueError("Failed to get a valid JSON response from the AI model.")
 
 gemini_service = GeminiService() 

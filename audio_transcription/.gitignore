@@ -13,3 +13,5 @@ venv/
 # IDE / Editor specific
 .idea/
 .vscode/ 
+
+README.md
