@@ -12,4 +12,7 @@ venv/
 
 # IDE / Editor specific
 .idea/
-.vscode/ 
+.vscode/
+
+# Exclude specific files and directories
+db.sqlite3 
